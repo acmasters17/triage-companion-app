@@ -1,28 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-
-const Stack = createNativeStackNavigator();
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginStack from "./LoginStack";
+import { useState } from "react";
+import HomeTabs from "./HomeTabs";
+import { ApplicationProvider } from "@ui-kitten/components";
+import * as eva from '@eva-design/eva';
+import { default as theme } from './theme.json';
 
 export default function App() {
+  const [signedIn, setSignedIn] = useState(false);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+      <NavigationContainer>
+        {signedIn === false ? <LoginStack /> : <HomeTabs />}
+      </NavigationContainer>
+    </ApplicationProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

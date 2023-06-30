@@ -21,7 +21,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const firebaseAuthListener = onAuthStateChanged(auth, (user: any) => {
       if (user) {
-        navigation.navigate("Home");
+        navigation.navigate("LabLogin");
       }
     });
 
@@ -58,6 +58,7 @@ export default function LoginScreen() {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleSignUp} style={[styles.button, styles.buttonOutline]}>
+          <Text style={styles.buttonOutlineText}>Sign In</Text>
           <Text style={styles.buttonOutlineText}>Register</Text>
         </TouchableOpacity>
       </View>
