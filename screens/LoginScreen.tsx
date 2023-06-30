@@ -1,16 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, TouchableOpacity, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { auth } from "../utilities/firebaseConfig";
+import { Button, Text } from "@ui-kitten/components";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -40,6 +34,10 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Text category="h3" style={{ paddingTop: 20 }}>
+        Welcome!
+      </Text>
+      <Text style={{ paddingVertical: 20 }}>Logo</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -55,12 +53,22 @@ export default function LoginScreen() {
           secureTextEntry
         />
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSignUp} style={[styles.button, styles.buttonOutline]}>
-          <Text style={styles.buttonOutlineText}>Sign In</Text>
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
+      <View
+        style={{
+          width: "60%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingBottom: 20,
+        }}
+      >
+        <Button style={{ width: "100%" }} onPress={handleSignUp}>
+          <Text>Sign In</Text>
+        </Button>
+        <Text>or</Text>
+        <Button style={{ width: "100%" }} onPress={handleSignUp}>
+          <Text>Sign Up</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -69,7 +77,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   inputContainer: {
