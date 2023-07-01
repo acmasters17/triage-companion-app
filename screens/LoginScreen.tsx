@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from "fir
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { auth } from "../utilities/firebaseConfig";
-import { Button, Text } from "@ui-kitten/components";
+import { Button, Text, Input } from "@ui-kitten/components";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -39,37 +39,26 @@ export default function LoginScreen() {
       </Text>
       <Text style={{ paddingVertical: 20 }}>Logo</Text>
       <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
+        <Input
+          label="Email"
           value={email}
+          placeholder="evasmith@triage.com"
           onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+          style={{ margin: 5 }}
         />
-        <TextInput
-          placeholder="Password"
+        <Input
           value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
+          label="Password"
+          placeholder="********"
+          style={{ margin: 5 }}
           secureTextEntry
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <View
-        style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          paddingBottom: 20,
-        }}
-      >
-        <Button style={{ width: "100%" }} onPress={handleSignUp}>
-          <Text>Sign In</Text>
-        </Button>
-        <Text>or</Text>
-        <Button style={{ width: "100%" }} onPress={handleSignUp}>
-          <Text>Sign Up</Text>
-        </Button>
-      </View>
+
+      <Button style={{ width: "80%", marginBottom: 100 }} onPress={handleSignUp}>
+        <Text>Sign Up</Text>
+      </Button>
     </KeyboardAvoidingView>
   );
 }
@@ -82,13 +71,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
   },
   buttonContainer: {
     width: "60%",
