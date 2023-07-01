@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text category="h3" style={{ paddingTop: 20 }}>
+      <Text category="h5" style={{ paddingTop: 20 }}>
         Welcome!
       </Text>
       <Text style={{ paddingVertical: 20 }}>Logo</Text>
