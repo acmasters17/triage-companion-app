@@ -1,10 +1,26 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Button, Text } from "@ui-kitten/components";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function LabRequestedScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <View style={styles.container}>
-      <Text>Lab Requested Screen</Text>
+      <Text category="h5" style={{ paddingTop: 20 }}>
+        Request Sent!
+      </Text>
+      <View style={{ display: "flex" , alignItems: "center"}}>
+        <Text style={{ padding: 20 }}>Your request to join lab LABNAME has been sent!</Text>
+        <MaterialCommunityIcon name="email-fast-outline" color="black" size={100} />
+        <Text style={{ padding: 20 }}>Please now wait until you are approved.</Text>
+      </View>
+      <Text style={{ padding: 20,textAlign: "center" }}>
+        You can refresh this page by using the above refresh icon!
+      </Text>
+      <Button style={{width: "60%", marginBottom: 100}} onPress={() => {navigation.goBack()}}>Back to Lab Login</Button>
     </View>
   );
 }
@@ -12,7 +28,7 @@ export default function LabRequestedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
   },
 });

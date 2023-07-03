@@ -1,6 +1,11 @@
 import { StyleSheet, View, KeyboardAvoidingView, TouchableOpacity, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { auth } from "../utilities/firebaseConfig";
@@ -32,6 +37,16 @@ export default function LoginScreen() {
     }
   };
 
+  const handleSignIn = async () => {
+    try {
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+      console.log("Logged in with:", user.email);
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text category="h5" style={{ paddingTop: 20 }}>
@@ -55,9 +70,11 @@ export default function LoginScreen() {
           onChangeText={(text) => setPassword(text)}
         />
       </View>
-
-      <Button style={{ width: "80%", marginBottom: 100 }} onPress={handleSignUp}>
+      <Button style={{ width: "80%" }} onPress={handleSignUp}>
         <Text>Sign Up</Text>
+      </Button>
+      <Button style={{ width: "80%", marginBottom: 100 }} onPress={handleSignIn}>
+        <Text>Sign In</Text>
       </Button>
     </KeyboardAvoidingView>
   );
