@@ -8,7 +8,7 @@ import * as eva from '@eva-design/eva';
 import { default as theme } from './theme.json';
 
 export default function App() {
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
   return (
     <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
       <NavigationContainer>
