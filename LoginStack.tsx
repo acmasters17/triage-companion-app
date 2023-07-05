@@ -5,6 +5,7 @@ import LabCreatedScreen from "./screens/LabCreatedScreen";
 import LabRequestedScreen from "./screens/LabRequestedScreen";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,10 +32,25 @@ export default function LoginStack() {
         options={{
           title: "",
           headerBackVisible: false,
-          headerRight: (props) => <TouchableOpacity onPress={() => {
-            //TODO - Firebase function
-            console.log("REFRESHING...")
-          }}><MaterialIcon name="refresh" color="white" size={26}/></TouchableOpacity>,
+          headerRight: (props) => (
+            <TouchableOpacity
+              onPress={() => {
+                //TODO - Firebase function
+                console.log("REFRESHING...");
+
+                const functions = getFunctions();
+                const addMessage = httpsCallable(functions, "testAuthenticated");
+                addMessage({ text: "test" }).then((result) => {
+                  // Read result of the Cloud Function.
+                  /** @type {any} */
+                  const data:any = result.data;
+                  console.log(data)
+                });
+              }}
+            >
+              <MaterialIcon name="refresh" color="white" size={26} />
+            </TouchableOpacity>
+          ),
           headerStyle: styles.blankHeader,
         }}
         component={LabRequestedScreen}
