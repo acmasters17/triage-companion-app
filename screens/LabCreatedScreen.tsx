@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Text } from "@ui-kitten/components";
 import { StyleSheet, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LabCreatedScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   return (
     <View style={styles.container}>
       <Text category="h5" style={{ paddingTop: 20 }}>

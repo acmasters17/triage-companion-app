@@ -1,3 +1,4 @@
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import KitScreen from "./screens/KitScreen";
 import FlashCardScreen from "./screens/FlashCardScreen";
@@ -5,6 +6,7 @@ import PDFViewerScreen from "./screens/PDFDisplayerScreen";
 import TechnicalTriageChecklistScreen from "./screens/TechnicalTriageChecklistScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +32,22 @@ export default function HomeTabs() {
           // You can return any component that you like here!
           return <MaterialCommunityIcon name={iconName} size={size} color={color} />;
         },
-        headerShown: false,
+        headerRight: (props) =>
+          route.name === "Profile" ? (
+            <></>
+          ) : (
+            <TouchableOpacity
+              style={{ marginRight: 15 }}
+              onPress={() => {
+                //TODO - Firebase function
+                console.log("REFRESHING...");
+              }}
+            >
+              <MaterialIcon name="refresh" color="white" size={26} />
+            </TouchableOpacity>
+          ),
+        headerTitle: "",
+        headerStyle: styles.blankHeader,
         tabBarActiveTintColor: "#EFEB8D",
         tabBarInactiveTintColor: "white",
         tabBarShowLabel: false,
@@ -45,3 +62,9 @@ export default function HomeTabs() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  blankHeader: {
+    backgroundColor: "#0C2962",
+  },
+});
