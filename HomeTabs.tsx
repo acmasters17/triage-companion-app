@@ -52,7 +52,7 @@ export default function HomeTabs() {
                 try {
                   const sopURI = await AsyncStorage.getItem("sop-uri");
                   if (sopURI !== null) {
-                    console.log("Setting SOP URL State" + sopURI);
+                    console.log("Setting SOP URL State " + sopURI);
                     // SOP URI exists so set it
                     setSopUrl(sopURI);
                   } else {
