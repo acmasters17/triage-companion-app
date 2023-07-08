@@ -4,17 +4,27 @@ import { Button, Input, Text } from "@ui-kitten/components";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { sanitizeLabName } from "../utilities/sanitizer";
+import { throwToastError } from "../utilities/toastFunctions";
 
 export default function LabLoginScreen() {
   const [labName, setLabName] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <View style={{ width: "100%", display: "flex", alignItems: "center", paddingVertical: 20 }}>
+      <View
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          paddingVertical: 20,
+        }}
+      >
         <Text category="h5">Join Lab</Text>
         <Text style={{ padding: 20 }}>
-          If you are not the lab head please refer to them in order to get the lab name to join your
-          organisation
+          If you are not the lab head please refer to them in order to get the
+          lab name to join your organisation
         </Text>
         <Input
           label="Lab Name"
@@ -30,10 +40,18 @@ export default function LabLoginScreen() {
           Request to Join
         </Button>
       </View>
-      <View style={{ width: "100%", display: "flex", alignItems: "center", paddingVertical: 20 }}>
+      <View
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          paddingVertical: 20,
+        }}
+      >
         <Text category="h5">Create Lab</Text>
         <Text style={{ padding: 20 }}>
-          If you are the lab head please fill out the form below to create a lab!
+          If you are the lab head please fill out the form below to create a
+          lab!
         </Text>
         <Input
           label="Lab Name"
@@ -46,15 +64,26 @@ export default function LabLoginScreen() {
           style={{ width: "70%", marginTop: 15, marginBottom: 80 }}
           onPress={async () => {
             //Creating a lab so call an async request
-            //Store Locally
+            const functions = getFunctions();
+            const createLabInCloud = httpsCallable(functions, "createLab");
             try {
-              await AsyncStorage.setItem("lab-name", labName);
-              await AsyncStorage.setItem("lab-approved", "true");
-            } catch (e) {
-              // saving error
-            }
+              await createLabInCloud({
+                labName: sanitizeLabName(labName),
+              });
 
-            navigation.navigate("LabCreated");
+              console.log("Lab Created Success");
+              //Store Locally
+              try {
+                await AsyncStorage.setItem("lab-name", labName);
+                await AsyncStorage.setItem("lab-approved", "true");
+              } catch (e) {
+                // saving error
+              }
+
+              navigation.navigate("LabCreated");
+            } catch (e) {
+              throwToastError(e);
+            }
           }}
         >
           Create Lab

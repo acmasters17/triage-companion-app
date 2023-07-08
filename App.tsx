@@ -7,6 +7,7 @@ import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { default as theme } from "./theme.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -22,10 +23,9 @@ export default function App() {
           if (approved === "true") {
             // lab name exists and they are approved so allow navigation to home tabs
             // TODO: need to check firebase login later
-            console.log("Approved Lab for " + labName)
+            console.log("Approved Lab for " + labName);
             setSignedIn(true);
-          }
-          else {
+          } else {
             console.log("Lab Code exists but not approved");
             // TODO: navigate to approval screen
           }
@@ -37,14 +37,17 @@ export default function App() {
       }
     };
 
-    getSignedInRequirements()
+    getSignedInRequirements();
   }, []);
 
   return (
-    <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
-      <NavigationContainer>
-        {signedIn === false ? <LoginStack /> : <HomeTabs />}
-      </NavigationContainer>
-    </ApplicationProvider>
+    <>
+      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <NavigationContainer>
+          {signedIn === false ? <LoginStack setSignedIn={setSignedIn} /> : <HomeTabs />}
+        </NavigationContainer>
+      </ApplicationProvider>
+      <Toast />
+    </>
   );
 }

@@ -9,7 +9,11 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 
 const Stack = createNativeStackNavigator();
 
-export default function LoginStack() {
+type LoginStackProps = {
+  setSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function LoginStack(props: LoginStackProps) {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -19,14 +23,25 @@ export default function LoginStack() {
       />
       <Stack.Screen
         name="LabLogin"
-        options={{ title: "", headerBackVisible: false, headerStyle: styles.blankHeader }}
+        options={{
+          title: "",
+          headerBackVisible: false,
+          headerStyle: styles.blankHeader,
+        }}
         component={LabLoginScreen}
       />
       <Stack.Screen
         name="LabCreated"
-        options={{ title: "", headerBackVisible: false, headerStyle: styles.blankHeader }}
-        component={LabCreatedScreen}
-      />
+        options={{
+          title: "",
+          headerBackVisible: false,
+          headerStyle: styles.blankHeader,
+        }}
+      >
+        {(navprops: any) => (
+          <LabCreatedScreen {...navprops} setSignedIn={props.setSignedIn} />
+        )}
+      </Stack.Screen>
       <Stack.Screen
         name="LabRequested"
         options={{
@@ -39,12 +54,15 @@ export default function LoginStack() {
                 console.log("REFRESHING...");
 
                 const functions = getFunctions();
-                const addMessage = httpsCallable(functions, "testAuthenticated");
+                const addMessage = httpsCallable(
+                  functions,
+                  "testAuthenticated"
+                );
                 addMessage({ text: "test" }).then((result) => {
                   // Read result of the Cloud Function.
                   /** @type {any} */
-                  const data:any = result.data;
-                  console.log(data)
+                  const data: any = result.data;
+                  console.log(data);
                 });
               }}
             >
