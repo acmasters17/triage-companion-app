@@ -1,12 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Text } from "@ui-kitten/components";
+import WebView from "react-native-webview";
 
 export default function PDFViewerScreen() {
   return (
-    <View style={styles.container}>
-      <Text>PDF Viewer screen currently in development</Text>
-    </View>
+    <WebView style={styles.container} source={{ uri: "https://expo.dev" }} />
   );
 }
 
