@@ -7,10 +7,17 @@ import TechnicalTriageChecklistScreen from "./screens/TechnicalTriageChecklistSc
 import ProfileScreen from "./screens/ProfileScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { refreshPDF } from "./utilities/refreshService";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeTabs() {
+  const [sopUrl, setSopUrl] = useState("");
+
+
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -38,9 +45,22 @@ export default function HomeTabs() {
           ) : (
             <TouchableOpacity
               style={{ marginRight: 15 }}
-              onPress={() => {
+              onPress={async () => {
                 //TODO - Firebase function
                 console.log("REFRESHING...");
+                await refreshPDF();
+                try {
+                  const sopURI = await AsyncStorage.getItem("sop-uri");
+                  if (sopURI !== null) {
+                    console.log("Setting SOP URL State" + sopURI);
+                    // SOP URI exists so set it
+                    setSopUrl(sopURI);
+                  } else {
+                    console.log("No SOP");
+                  }
+                } catch (e) {
+                  // error reading value
+                }
               }}
             >
               <MaterialIcon name="refresh" color="white" size={26} />
@@ -56,7 +76,9 @@ export default function HomeTabs() {
     >
       <Tab.Screen name="Kit Checklist" component={KitScreen} />
       <Tab.Screen name="Flash Cards" component={FlashCardScreen} />
-      <Tab.Screen name="PDF Viewer" component={PDFViewerScreen} />
+      <Tab.Screen name="PDF Viewer" >
+        {(navprops) => <PDFViewerScreen {...navprops} uri={sopUrl}/>}
+        </Tab.Screen>
       <Tab.Screen name="Technical Triage Checklist" component={TechnicalTriageChecklistScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
