@@ -24,7 +24,7 @@ export default function App() {
             // lab name exists and they are approved so allow navigation to home tabs
             // TODO: need to check firebase login later
             console.log("Approved Lab for " + labName);
-            setSignedIn(true);
+            setSignedIn(false);
           } else {
             console.log("Lab Code exists but not approved");
             // TODO: navigate to approval screen

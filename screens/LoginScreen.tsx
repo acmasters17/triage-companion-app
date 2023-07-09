@@ -1,8 +1,7 @@
-import { StyleSheet, View, KeyboardAvoidingView, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -50,9 +49,12 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text category="h5" style={{ paddingTop: 20 }}>
-        Welcome!
+        Welcome to your DTC!
       </Text>
-      <Text style={{ paddingVertical: 20 }}>Logo</Text>
+      <Image
+        source={require('../assets/DTCLogoNoBackground.png')}
+        style={{height: 200, width: 200}}
+      />
       <View style={styles.inputContainer}>
         <Input
           label="Email"
@@ -73,7 +75,7 @@ export default function LoginScreen() {
       <Button style={{ width: "80%" }} onPress={handleSignUp}>
         <Text>Sign Up</Text>
       </Button>
-      <Button style={{ width: "80%", marginBottom: 100 }} onPress={handleSignIn}>
+      <Button style={{ width: "80%", marginBottom: 50 }} onPress={handleSignIn}>
         <Text>Sign In</Text>
       </Button>
     </KeyboardAvoidingView>

@@ -4,10 +4,10 @@
     "slug": "triage-companion-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/DTCicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/DTCicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
