@@ -2,12 +2,11 @@ import React from "react";
 import { Button, Text } from "@ui-kitten/components";
 import { StyleSheet, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type LabCreatedScreenProps = {
-  setSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export default function LabCreatedScreen(props: LabCreatedScreenProps) {
+export default function LabCreatedScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <View style={styles.container}>
       <Text category="h5" style={{ paddingTop: 20 }}>
@@ -30,7 +29,7 @@ export default function LabCreatedScreen(props: LabCreatedScreenProps) {
       <Button
         style={{ width: "60%", marginBottom: 100 }}
         onPress={() => {
-          props.setSignedIn(true);
+          navigation.navigate("Home");
         }}
       >
         Start

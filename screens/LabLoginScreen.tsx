@@ -9,7 +9,9 @@ import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
 
 export default function LabLoginScreen() {
-  const [labName, setLabName] = useState("");
+  const [requestedlabName, setRequestedLabName] = useState("");
+  const [createdlabName, setCreatedLabName] = useState("");
+  const [requestBeingMade, setRequestBeingMade] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -28,14 +30,29 @@ export default function LabLoginScreen() {
         </Text>
         <Input
           label="Lab Name"
-          value={labName}
+          value={requestedlabName}
           placeholder="USW-Cyber-Lab"
-          onChangeText={(text) => setLabName(text)}
+          onChangeText={(text) => setRequestedLabName(text)}
           style={{ margin: 20 }}
         />
         <Button
           style={{ width: "70%", marginTop: 15 }}
-          onPress={() => navigation.navigate("LabRequested")}
+          disabled={requestBeingMade}
+          onPress={async () => {
+            setRequestBeingMade(true);
+            //TODO: cloud Request to join lab
+
+            //Store Locally
+            try {
+              await AsyncStorage.setItem("lab-name", requestedlabName);
+              await AsyncStorage.setItem("lab-approved", "false");
+              navigation.navigate("LabRequested");
+            } catch (e) {
+              // saving error
+              throwToastError(e);
+            }
+            setRequestBeingMade(false);
+          }}
         >
           Request to Join
         </Button>
@@ -55,35 +72,39 @@ export default function LabLoginScreen() {
         </Text>
         <Input
           label="Lab Name"
-          value={labName}
+          value={createdlabName}
           placeholder="USW-New-Cyber-Lab"
-          onChangeText={(text) => setLabName(text)}
+          onChangeText={(text) => setCreatedLabName(text)}
           style={{ margin: 20 }}
         />
         <Button
           style={{ width: "70%", marginTop: 15, marginBottom: 80 }}
+          disabled={requestBeingMade}
           onPress={async () => {
+            setRequestBeingMade(true);
             //Creating a lab so call an async request
             const functions = getFunctions();
             const createLabInCloud = httpsCallable(functions, "createLab");
             try {
               await createLabInCloud({
-                labName: sanitizeLabName(labName),
+                labName: sanitizeLabName(createdlabName),
               });
 
               console.log("Lab Created Success");
+
               //Store Locally
               try {
-                await AsyncStorage.setItem("lab-name", labName);
+                await AsyncStorage.setItem("lab-name", createdlabName);
                 await AsyncStorage.setItem("lab-approved", "true");
+                navigation.navigate("LabCreated");
               } catch (e) {
                 // saving error
+                throwToastError(e);
               }
-
-              navigation.navigate("LabCreated");
             } catch (e) {
               throwToastError(e);
             }
+            setRequestBeingMade(false);
           }}
         >
           Create Lab

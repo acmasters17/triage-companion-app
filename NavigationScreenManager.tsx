@@ -14,10 +14,10 @@ import LoginScreen from "./screens/LoginScreen";
 import LabLoginScreen from "./screens/LabLoginScreen";
 import { StyleSheet } from "react-native";
 import LabRequestedScreen from "./screens/LabRequestedScreen";
-import LabCreatedScreen from "./screens/LabCreatedScreen";
 import { TouchableOpacity } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import LabCreatedScreen from "./screens/LabCreatedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,7 +67,8 @@ export default function NavigationScreenManager() {
       if (!hasLoadedOnce) {
         console.log("Setting is loaded to true");
         setHasLoadedOnce(true);
-        await SplashScreen.hideAsync();
+        // add small delay to wait for transistion animation before hiding screen
+        setTimeout(async () => await SplashScreen.hideAsync(), 500);
       }
     });
 
@@ -107,21 +108,21 @@ export default function NavigationScreenManager() {
           headerBackVisible: false,
           headerRight: (props) => (
             <TouchableOpacity
-              onPress={() => {
+              onPress={async () => {
                 //TODO - Firebase function
                 console.log("REFRESHING...");
 
-                const functions = getFunctions();
-                const addMessage = httpsCallable(
-                  functions,
-                  "testAuthenticated"
+                alert(
+                  "Congratulations, your request to join lab TODO:LAB NAME has been approved."
                 );
-                addMessage({ text: "test" }).then((result) => {
-                  // Read result of the Cloud Function.
-                  /** @type {any} */
-                  const data: any = result.data;
-                  console.log(data);
-                });
+                // set approved to true for test purposes
+                try {
+                  await AsyncStorage.setItem("lab-approved", "true");
+                  navigation.navigate("Home");
+                } catch (e) {
+                  // saving error
+                  throwToastError(e);
+                }
               }}
             >
               <MaterialIcon name="refresh" color="white" size={26} />

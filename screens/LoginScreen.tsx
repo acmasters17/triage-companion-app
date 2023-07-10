@@ -1,11 +1,12 @@
 import { StyleSheet, View, KeyboardAvoidingView, Image } from "react-native";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../utilities/firebaseConfig";
 import { Button, Text, Input } from "@ui-kitten/components";
+import { throwToastError } from "../utilities/toastFunctions";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -13,21 +14,29 @@ export default function LoginScreen() {
 
   const handleSignUp = async () => {
     try {
-      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredentials.user;
       console.log("Registered with:", user.email);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (e) {
+      throwToastError(e);
     }
   };
 
   const handleSignIn = async () => {
     try {
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredentials.user;
       console.log("Logged in with:", user.email);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (e) {
+      throwToastError(e);
     }
   };
 
@@ -37,8 +46,8 @@ export default function LoginScreen() {
         Welcome to your DTC!
       </Text>
       <Image
-        source={require('../assets/DTCLogoNoBackground.png')}
-        style={{height: 200, width: 200}}
+        source={require("../assets/DTCLogoNoBackground.png")}
+        style={{ height: 200, width: 200 }}
       />
       <View style={styles.inputContainer}>
         <Input
