@@ -1,30 +1,15 @@
 import { StyleSheet, View, KeyboardAvoidingView, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { auth } from "../utilities/firebaseConfig";
 import { Button, Text, Input } from "@ui-kitten/components";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
-  useEffect(() => {
-    const firebaseAuthListener = onAuthStateChanged(auth, (user: any) => {
-      if (user) {
-        navigation.navigate("LabLogin");
-      }
-    });
-
-    return firebaseAuthListener;
-  }, []);
 
   const handleSignUp = async () => {
     try {

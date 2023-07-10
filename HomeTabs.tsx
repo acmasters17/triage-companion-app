@@ -8,15 +8,13 @@ import ProfileScreen from "./screens/ProfileScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { refreshPDF } from "./utilities/refreshService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeTabs() {
   const [sopUrl, setSopUrl] = useState("");
-
-
 
   return (
     <Tab.Navigator
@@ -37,7 +35,9 @@ export default function HomeTabs() {
           }
 
           // You can return any component that you like here!
-          return <MaterialCommunityIcon name={iconName} size={size} color={color} />;
+          return (
+            <MaterialCommunityIcon name={iconName} size={size} color={color} />
+          );
         },
         headerRight: (props) =>
           route.name === "Profile" ? (
@@ -76,10 +76,13 @@ export default function HomeTabs() {
     >
       <Tab.Screen name="Kit Checklist" component={KitScreen} />
       <Tab.Screen name="Flash Cards" component={FlashCardScreen} />
-      <Tab.Screen name="PDF Viewer" >
-        {(navprops) => <PDFViewerScreen {...navprops} uri={sopUrl}/>}
-        </Tab.Screen>
-      <Tab.Screen name="Technical Triage Checklist" component={TechnicalTriageChecklistScreen} />
+      <Tab.Screen name="PDF Viewer">
+        {(navprops) => <PDFViewerScreen {...navprops} uri={sopUrl} />}
+      </Tab.Screen>
+      <Tab.Screen
+        name="Technical Triage Checklist"
+        component={TechnicalTriageChecklistScreen}
+      />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

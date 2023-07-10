@@ -7,7 +7,7 @@
     "icon": "./assets/DTCicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/DTCicon.png",
+      "image": "./assets/DTCLogoNoBackground.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
