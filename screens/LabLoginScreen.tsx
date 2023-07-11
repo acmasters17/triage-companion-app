@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
+import { auth } from "../utilities/firebaseConfig";
 
 export default function LabLoginScreen() {
   const [requestedlabName, setRequestedLabName] = useState("");
@@ -96,6 +97,7 @@ export default function LabLoginScreen() {
               try {
                 await AsyncStorage.setItem("lab-name", createdlabName);
                 await AsyncStorage.setItem("lab-approved", "true");
+                await AsyncStorage.setItem("lab-owner", "true")
                 navigation.navigate("LabCreated");
               } catch (e) {
                 // saving error
