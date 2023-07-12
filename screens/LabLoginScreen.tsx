@@ -41,15 +41,23 @@ export default function LabLoginScreen() {
           disabled={requestBeingMade}
           onPress={async () => {
             setRequestBeingMade(true);
-            //TODO: cloud Request to join lab
+            // Cloud Request to join lab so call an async request
+            const functions = getFunctions();
+            const requestToJoinLabInCloud = httpsCallable(
+              functions,
+              "reqToJoinLab"
+            );
 
-            //Store Locally
             try {
+              // cloud request to join lab name
+              await requestToJoinLabInCloud({
+                labName: sanitizeLabName(requestedlabName),
+              });
+              console.log("Lab Request for lab - " + requestedlabName);
               await AsyncStorage.setItem("lab-name", requestedlabName);
               await AsyncStorage.setItem("lab-approved", "false");
               navigation.navigate("LabRequested");
             } catch (e) {
-              // saving error
               throwToastError(e);
             }
             setRequestBeingMade(false);
@@ -94,15 +102,11 @@ export default function LabLoginScreen() {
               console.log("Lab Created Success");
 
               //Store Locally
-              try {
-                await AsyncStorage.setItem("lab-name", createdlabName);
-                await AsyncStorage.setItem("lab-approved", "true");
-                await AsyncStorage.setItem("lab-owner", "true")
-                navigation.navigate("LabCreated");
-              } catch (e) {
-                // saving error
-                throwToastError(e);
-              }
+
+              await AsyncStorage.setItem("lab-name", createdlabName);
+              await AsyncStorage.setItem("lab-approved", "true");
+              await AsyncStorage.setItem("lab-owner", "true");
+              navigation.navigate("LabCreated");
             } catch (e) {
               throwToastError(e);
             }

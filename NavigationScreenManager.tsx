@@ -18,12 +18,14 @@ import { TouchableOpacity } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import LabCreatedScreen from "./screens/LabCreatedScreen";
+import { sanitizeLabName } from "./utilities/sanitizer";
 
 const Stack = createNativeStackNavigator();
 
 export default function NavigationScreenManager() {
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const [requestBeingMade, setRequestBeingMade] = useState(false);
 
   // run on start up, check labcode and if approved, if both of these are true then progress to home screen
   // if offline this is fine, if online need to check user logged in as well
@@ -108,21 +110,40 @@ export default function NavigationScreenManager() {
           headerBackVisible: false,
           headerRight: (props) => (
             <TouchableOpacity
+              disabled={requestBeingMade}
               onPress={async () => {
-                //TODO - Firebase function
-                console.log("REFRESHING...");
-
-                alert(
-                  "Congratulations, your request to join lab TODO:LAB NAME has been approved."
+                setRequestBeingMade(true);
+                // Cloud Request to join lab so call an async request
+                const functions = getFunctions();
+                const checkIfLabRequestApproved = httpsCallable(
+                  functions,
+                  "checkIfLabRequestApproved"
                 );
-                // set approved to true for test purposes
+
                 try {
-                  await AsyncStorage.setItem("lab-approved", "true");
-                  navigation.navigate("Home");
+                  // check if approved
+                  const labName = await AsyncStorage.getItem("lab-name");
+                  if (labName) {
+                    const res = await checkIfLabRequestApproved({
+                      labName: sanitizeLabName(labName),
+                    });
+
+                    const isApproved = (res.data as any).approved;
+
+                    if (isApproved) {
+                      alert(
+                        `Congratulations, your request to join lab ${labName} has been approved.`
+                      );
+                      await AsyncStorage.setItem("lab-approved", "true");
+                      navigation.navigate("Home");
+                    } else {
+                      throwToastError("Sorry, you are still not approved, please try again later!");
+                    }
+                  }
                 } catch (e) {
-                  // saving error
                   throwToastError(e);
                 }
+                setRequestBeingMade(false);
               }}
             >
               <MaterialIcon name="refresh" color="white" size={26} />
