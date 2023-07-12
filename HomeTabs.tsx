@@ -4,12 +4,12 @@ import KitScreen from "./screens/KitScreen";
 import FlashCardScreen from "./screens/FlashCardScreen";
 import PDFViewerScreen from "./screens/PDFDisplayerScreen";
 import TechnicalTriageChecklistScreen from "./screens/TechnicalTriageChecklistScreen";
-import ProfileScreen from "./screens/ProfileScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { refreshPDF } from "./utilities/refreshService";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProfileStack from "./ProfileStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -83,7 +83,7 @@ export default function HomeTabs() {
         name="Technical Triage Checklist"
         component={TechnicalTriageChecklistScreen}
       />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileStack} options={{headerShown: false}} />
     </Tab.Navigator>
   );
 }

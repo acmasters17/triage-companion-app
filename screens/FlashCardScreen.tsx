@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { Text } from "@ui-kitten/components";
+import { Layout, Text } from "@ui-kitten/components";
 
 export default function FlashCardScreen() {
   return (
-    <View style={styles.container}>
+    <Layout style={styles.container}>
       <Text>Flash card screen currently in development</Text>
-    </View>
+    </Layout>
   );
 }
 

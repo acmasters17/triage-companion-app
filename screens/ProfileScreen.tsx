@@ -4,11 +4,14 @@ import { Button, Layout, Text } from "@ui-kitten/components";
 import { auth } from "../utilities/firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { throwToastError } from "../utilities/toastFunctions";
-import { Avatar, ListItem } from "@rneui/base";
+import { Avatar } from "@rneui/base";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function ProfileScreen() {
   const [isLabOwner, setIsLabOwner] = useState(false);
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   useEffect(() => {
     // check if lab owner
@@ -82,14 +85,14 @@ export default function ProfileScreen() {
           <>
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => console.log("TODO")}
+              onPress={() => navigation.navigate("MyLab")}
             >
               <Text>My Lab</Text>
               <MaterialCommunityIcon name="chevron-right" size={18} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => console.log("TODO")}
+              onPress={() => navigation.navigate("MyContentHome")}
             >
               <Text>Manage Lab Content</Text>
               <MaterialCommunityIcon name="chevron-right" size={18} />
@@ -98,13 +101,6 @@ export default function ProfileScreen() {
         ) : (
           <></>
         )}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => console.log("TODO")}
-        >
-          <Text>Settings</Text>
-          <MaterialCommunityIcon name="chevron-right" size={18} />
-        </TouchableOpacity>
         <Button
           style={{
             width: "100%",

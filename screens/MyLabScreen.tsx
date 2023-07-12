@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { Layout, Text } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 
-export default function KitScreen() {
+export default function MyLabScreen() {
   return (
-    <Layout style={styles.container}>
-      <Text>Kit screen currently in development</Text>
-    </Layout>
+    <View style={styles.container}>
+      <Text>My Lab Screen currently in development</Text>
+    </View>
   );
 }
 
