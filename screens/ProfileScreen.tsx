@@ -56,7 +56,7 @@ export default function ProfileScreen() {
         <Avatar
           size="large"
           rounded
-          title={auth.currentUser.email ? auth.currentUser.email[0] : "Error"}
+          title={auth.currentUser.email ? auth.currentUser.email[0].toUpperCase() : "Er"}
           containerStyle={{ backgroundColor: "#0C2962", marginLeft: 20 }}
         />
         <View

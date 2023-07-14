@@ -65,7 +65,7 @@ export default function MyLabScreen() {
           >
             <Avatar
               rounded
-              title={user.email[0]}
+              title={user.email[0].toUpperCase()}
               containerStyle={{ backgroundColor: "#0C2962" }}
             />
             <ListItem.Content>
