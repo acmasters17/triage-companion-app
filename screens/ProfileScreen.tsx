@@ -67,7 +67,7 @@ export default function ProfileScreen() {
             marginLeft: 20,
           }}
         >
-          <Text category="s1">{`Email: ${auth.currentUser.email}`}</Text>
+          <Text category="s1">{`${auth.currentUser.email}`}</Text>
           <Text category="s2">{isLabOwner ? "Lab Owner" : "Lab Member"}</Text>
         </View>
       </View>

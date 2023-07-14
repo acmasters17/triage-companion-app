@@ -43,7 +43,8 @@ const updateSource = () => {
   return isFocused ? (
     <WebView
       originWhitelist={["*"]}
-      source={renderedOnce ? {uri: fileLocation} : undefined}
+      // source={renderedOnce ? {uri: fileLocation} : undefined}
+      source={{uri: "https://expo.dev/"}}
       allowFileAccess={true}
       allowUniversalAccessFromFileURLs={true}
       allowFileAccessFromFileURLs={true}
