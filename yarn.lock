@@ -5408,6 +5408,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-document-picker@npm:~11.2.2":
+  version: 11.2.2
+  resolution: "expo-document-picker@npm:11.2.2"
+  peerDependencies:
+    expo: "*"
+  checksum: aa70d7121fe544f4f0ce1ee86fd66e5499097f64dd2cf3652ee8e9a6576018cf64807b19a1a5b5734bd10f42ad638c72234096df2332b0f63809fb3093d3645b
+  languageName: node
+  linkType: hard
+
 "expo-file-system@npm:~15.2.2":
   version: 15.2.2
   resolution: "expo-file-system@npm:15.2.2"
@@ -10618,6 +10627,7 @@ __metadata:
     "@types/react-native-vector-icons": ^6.4.13
     "@ui-kitten/components": ^5.3.1
     expo: ~48.0.0
+    expo-document-picker: ~11.2.2
     expo-file-system: ~15.2.2
     expo-splash-screen: ~0.18.2
     expo-status-bar: ~1.4.4
