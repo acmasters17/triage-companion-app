@@ -15,7 +15,7 @@ export default function LabLoginScreen() {
   const [requestBeingMade, setRequestBeingMade] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.container}>
       <View
         style={{
           width: "100%",
@@ -116,7 +116,7 @@ export default function LabLoginScreen() {
           Create Lab
         </Button>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

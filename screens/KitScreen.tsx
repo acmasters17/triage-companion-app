@@ -1,10 +1,11 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Layout, Spinner, Text } from "@ui-kitten/components";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function KitScreen() {
   const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([]);
@@ -16,7 +17,7 @@ export default function KitScreen() {
     const getChecklistConfig = async () => {
       setIsLoading(true);
       // Cloud Request to join lab so call an async request
-      const getKitChecklist = httpsCallable(functions, "getLabKitChecklist");
+      const getKitChecklist = httpsCallable(functions, "getKitChecklist");
       console.log(getKitChecklist)
       const loadedLabName = await AsyncStorage.getItem("lab-name");
       if (loadedLabName) {
@@ -68,6 +69,14 @@ export default function KitScreen() {
       >
         Make sure you've got everything before you go
       </Text>
+      <View>
+        <Text>Items</Text>
+        <TouchableOpacity>
+          <View>
+            <MaterialCommunityIcon name="eraser"/>
+          </View>
+        </TouchableOpacity>
+      </View>
       {kitChecklistItems.length === 0 ? (
         <Text>No items have been set yet!</Text>
       ) : (

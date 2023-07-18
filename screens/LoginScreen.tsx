@@ -41,7 +41,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <View style={styles.container}>
       <Text category="h5" style={{ paddingTop: 20 }}>
         Welcome to your DTC!
       </Text>
@@ -72,7 +72,7 @@ export default function LoginScreen() {
       <Button style={{ width: "80%", marginBottom: 50 }} onPress={handleSignIn}>
         <Text>Sign In</Text>
       </Button>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
