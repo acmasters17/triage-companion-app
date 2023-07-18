@@ -9,11 +9,8 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { CheckBox } from "@rneui/base";
 
 export default function KitScreen() {
-  const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([
-    "Test",
-    "Test 2",
-  ]);
-  const [checkedItems, setCheckedItems] = useState<boolean[]>([false, true]);
+  const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([]);
+  const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const functions = getFunctions();
 
@@ -23,7 +20,6 @@ export default function KitScreen() {
       setIsLoading(true);
       // Cloud Request to join lab so call an async request
       const getKitChecklist = httpsCallable(functions, "getKitChecklist");
-      console.log(getKitChecklist)
       const loadedLabName = await AsyncStorage.getItem("lab-name");
       if (loadedLabName) {
         try {

@@ -31,6 +31,13 @@ export default function MyLabScreen() {
       >
         <TouchableOpacity
           style={styles.menuButton}
+          onPress={() => navigation.navigate("MyContentKit")}
+        >
+          <Text>Manage Kit Checklist</Text>
+          <MaterialCommunityIcon name="chevron-right" size={18} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
           onPress={() => navigation.navigate("MyContentSOP")}
         >
           <Text>Manage SOP</Text>
