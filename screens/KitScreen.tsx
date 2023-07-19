@@ -18,7 +18,6 @@ export default function KitScreen(props:KitScreenProps) {
 
   // get loaded checklist
   useEffect(() => {
-    console.log("Loading New Config")
     const getChecklistConfig = async () => {
       setIsLoading(true);
       const loadedChecklist = await AsyncStorage.getItem("kitChecklist");

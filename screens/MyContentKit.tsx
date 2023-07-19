@@ -11,7 +11,7 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
-import { throwToastError } from "../utilities/toastFunctions";
+import { throwToastError, throwToastSuccess } from "../utilities/toastFunctions";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Dialog } from "@rneui/base";
 
@@ -104,6 +104,7 @@ export default function MyContentKit() {
       throwToastError(e);
     }
     setRequestBeingMade(false);
+    throwToastSuccess(`Your new Kit Checklist has been uploaded.`);
   };
 
   const renderEditDeleteButtons = (item: string, index: number) => (
