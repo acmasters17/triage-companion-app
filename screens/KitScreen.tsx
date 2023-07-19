@@ -1,9 +1,7 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Layout, Spinner, Text } from "@ui-kitten/components";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CheckBox } from "@rneui/base";
