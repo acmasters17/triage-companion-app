@@ -11,13 +11,14 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
-import { throwToastError, throwToastSuccess } from "../utilities/toastFunctions";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import {
+  throwToastError,
+  throwToastSuccess,
+} from "../utilities/toastFunctions";
 import { Dialog } from "@rneui/base";
 
 export default function MyContentKit() {
-  const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([
-  ]);
+  const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [requestBeingMade, setRequestBeingMade] = useState(false);
   const [addEditDialogVisible, setAddEditDialogVisible] = useState(false);
@@ -92,19 +93,15 @@ export default function MyContentKit() {
     const updateKitChecklist = httpsCallable(functions, "updateKitChecklist");
     try {
       // cloud request to get checklist
-      const req = await updateKitChecklist({
+      await updateKitChecklist({
         labName: sanitizeLabName(labName),
         newKitChecklist: kitChecklistItems,
       });
-
-      // get result
-      const data = req.data as any;
-      console.log(data);
+      throwToastSuccess(`Your new Kit Checklist has been uploaded.`);
     } catch (e) {
       throwToastError(e);
     }
     setRequestBeingMade(false);
-    throwToastSuccess(`Your new Kit Checklist has been uploaded.`);
   };
 
   const renderEditDeleteButtons = (item: string, index: number) => (
