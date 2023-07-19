@@ -6,14 +6,61 @@ import PDFViewerScreen from "./screens/PDFDisplayerScreen";
 import TechnicalTriageChecklistScreen from "./screens/TechnicalTriageChecklistScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileStack from "./ProfileStack";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import Toast from "react-native-toast-message";
+import { throwToastError, throwToastSuccess } from "./utilities/toastFunctions";
+import { sanitizeLabName } from "./utilities/sanitizer";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeTabs() {
-  const [sopUrl, setSopUrl] = useState("");
+  const [newConfigsLoading, setNewConfigsLoading] = useState(false);
+  const [reloadTabs, setReloadTabs] = useState(false);
+  const [loadedLabName, setLoadedLabName] = useState("");
+  const functions = getFunctions();
+
+  useEffect(() => {
+    const getLabNameFromStorage = async () => {
+      const newLabName = await AsyncStorage.getItem("lab-name");
+      if (newLabName) {
+        setLoadedLabName(newLabName);
+      } else {
+        throwToastError("Stored lab name not found - please contact support");
+      }
+    };
+
+    getLabNameFromStorage();
+  }, []);
+
+  const getAllConfigs = async () => {
+    setNewConfigsLoading(true);
+    await getKitCheckListConfig();
+    setNewConfigsLoading(false);
+    setReloadTabs(!reloadTabs);
+    throwToastSuccess("New content has been downloaded.");
+  };
+
+  const getKitCheckListConfig = async () => {
+    // Cloud Request get checklist content
+    const getKitChecklist = httpsCallable(functions, "getKitChecklist");
+    try {
+      // cloud request to get checklist
+      const req = await getKitChecklist({
+        labName: sanitizeLabName(loadedLabName),
+      });
+
+      // get checklist
+      const data = req.data as any;
+      const newKitChecklist = data.kitChecklist as string[];
+
+      AsyncStorage.setItem("kitChecklist", JSON.stringify(newKitChecklist));
+    } catch (e) {
+      throwToastError(e);
+    }
+  };
 
   return (
     <Tab.Navigator
@@ -38,33 +85,17 @@ export default function HomeTabs() {
             <MaterialCommunityIcon name={iconName} size={size} color={color} />
           );
         },
-        // headerRight: (props) =>
-        //   route.name === "Profile" ? (
-        //     <></>
-        //   ) : (
-        //     <TouchableOpacity
-        //       style={{ marginRight: 15 }}
-        //       onPress={async () => {
-        //         //TODO - Firebase function
-        //         console.log("REFRESHING...");
-        //         await refreshPDF();
-        //         try {
-        //           const sopURI = await AsyncStorage.getItem("sop-uri");
-        //           if (sopURI !== null) {
-        //             console.log("Setting SOP URL State " + sopURI);
-        //             // SOP URI exists so set it
-        //             setSopUrl(sopURI);
-        //           } else {
-        //             console.log("No SOP");
-        //           }
-        //         } catch (e) {
-        //           // error reading value
-        //         }
-        //       }}
-        //     >
-        //       <MaterialIcon name="refresh" color="white" size={26} />
-        //     </TouchableOpacity>
-        //   ),
+        headerRight: (props) =>
+          route.name === "Profile" ? (
+            <></>
+          ) : (
+            <TouchableOpacity
+              style={{ marginRight: 15 }}
+              onPress={getAllConfigs}
+            >
+              <MaterialIcon name="refresh" color="white" size={26} />
+            </TouchableOpacity>
+          ),
         headerTitle: "",
         headerStyle: styles.blankHeader,
         tabBarActiveTintColor: "#EFEB8D",
@@ -73,16 +104,20 @@ export default function HomeTabs() {
         tabBarStyle: { backgroundColor: "#0C2962" },
       })}
     >
-      <Tab.Screen name="Kit Checklist" component={KitScreen} />
-      <Tab.Screen name="Flash Cards" component={FlashCardScreen} />
-      <Tab.Screen name="PDF Viewer">
-        {(navprops) => <PDFViewerScreen {...navprops} uri={sopUrl} />}
+      <Tab.Screen name="Kit Checklist">
+        {() => <KitScreen reloadBecauseOfCloud={reloadTabs} />}
       </Tab.Screen>
+      <Tab.Screen name="Flash Cards" component={FlashCardScreen} />
+      <Tab.Screen name="PDF Viewer" component={PDFViewerScreen}/>
       <Tab.Screen
         name="Technical Triage Checklist"
         component={TechnicalTriageChecklistScreen}
       />
-      <Tab.Screen name="Profile" component={ProfileStack} options={{headerShown: false}} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }

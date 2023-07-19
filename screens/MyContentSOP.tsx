@@ -5,7 +5,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
-import { throwToastError } from "../utilities/toastFunctions";
+import { throwToastError, throwToastSuccess } from "../utilities/toastFunctions";
 import { getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import Toast from "react-native-toast-message";
 
@@ -81,13 +81,7 @@ export default function MyContentSOP() {
     setFileNameToUpload("");
     setFileURIToUpload("");
 
-    // throw success toast
-    Toast.show({
-      type: "success",
-      text1: "Success!",
-      text2: `Your new SOP has been uploaded!`,
-      position: "bottom",
-    });
+    throwToastSuccess(`Your new SOP has been uploaded.`);
   };
 
   return (

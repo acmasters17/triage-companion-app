@@ -56,7 +56,11 @@ export default function ProfileScreen() {
         <Avatar
           size="large"
           rounded
-          title={auth.currentUser.email ? auth.currentUser.email[0].toUpperCase() : "Er"}
+          title={
+            auth.currentUser.email
+              ? auth.currentUser.email[0].toUpperCase()
+              : "Er"
+          }
           containerStyle={{ backgroundColor: "#0C2962", marginLeft: 20 }}
         />
         <View
@@ -111,8 +115,11 @@ export default function ProfileScreen() {
           status="warning"
           onPress={async () => {
             try {
-              await AsyncStorage.setItem("lab-name", "");
-              await AsyncStorage.setItem("lab-approved", "false");
+              await AsyncStorage.multiRemove([
+                "lab-name",
+                "lab-approved",
+                "lab-owner",
+              ]);
               auth.signOut();
             } catch (e) {
               // saving error

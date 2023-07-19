@@ -9,11 +9,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
 
-type PDFViewerProps = {
-  uri: string;
-};
-
-export default function PDFViewerScreen(props: PDFViewerProps) {
+export default function PDFViewerScreen() {
   const [loadAgain, setLoadAgain] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSOPBlank, setIsSOPBlank] = useState(false);
@@ -68,7 +64,7 @@ export default function PDFViewerScreen(props: PDFViewerProps) {
   if (isSOPBlank)
     return (
       <View style={styles.container}>
-        <Text style={{padding: 10}}>
+        <Text style={{ padding: 10 }}>
           No SOP has been uploaded yet! Please contact your lab head to upload
           one
         </Text>

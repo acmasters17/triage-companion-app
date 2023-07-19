@@ -8,42 +8,39 @@ import { throwToastError } from "../utilities/toastFunctions";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CheckBox } from "@rneui/base";
 
-export default function KitScreen() {
+type KitScreenProps = {
+  reloadBecauseOfCloud: boolean
+}
+
+export default function KitScreen(props:KitScreenProps) {
   const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const functions = getFunctions();
+  
 
-  // get all users on start up
+  // get loaded checklist
   useEffect(() => {
+    console.log("Loading New Config")
     const getChecklistConfig = async () => {
       setIsLoading(true);
-      // Cloud Request to join lab so call an async request
-      const getKitChecklist = httpsCallable(functions, "getKitChecklist");
-      const loadedLabName = await AsyncStorage.getItem("lab-name");
-      if (loadedLabName) {
+      const loadedChecklist = await AsyncStorage.getItem("kitChecklist");
+      if (loadedChecklist) {
         try {
-          // cloud request to get checklist
-          const req = await getKitChecklist({
-            labName: sanitizeLabName(loadedLabName),
-          });
-
-          // get checklist
-          const data = req.data as any;
-          const newKitChecklist = data.kitChecklist as string[];
+          //parsing it
+          const newKitChecklist = JSON.parse(loadedChecklist) as string[];
 
           setKitChecklistItems(newKitChecklist);
           setCheckedItems(newKitChecklist.map(_ => false));
 
         } catch (e) {
-          throwToastError(e);
+          throwToastError("No Checklist has been set yet");
         }
       }
       setIsLoading(false);
     };
 
     getChecklistConfig();
-  }, []);
+  }, [props.reloadBecauseOfCloud]);
 
   if (isLoading)
     return (
@@ -81,7 +78,7 @@ export default function KitScreen() {
         }}
       >
         <Text category="h6">Items</Text>
-        <TouchableOpacity onPress={() => setCheckedItems([false,false])}>
+        <TouchableOpacity onPress={() => setCheckedItems(oldItems => oldItems.map(_ => false))}>
           <View
             style={{
               padding: 10,
