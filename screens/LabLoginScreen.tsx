@@ -87,7 +87,7 @@ export default function LabLoginScreen() {
           style={{ margin: 20 }}
         />
         <Button
-          style={{ width: "70%", marginTop: 15, marginBottom: 80 }}
+          style={{ width: "70%", marginTop: 15, marginBottom: 100 }}
           disabled={requestBeingMade}
           onPress={async () => {
             setRequestBeingMade(true);

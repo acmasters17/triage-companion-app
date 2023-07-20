@@ -26,11 +26,9 @@ export default function PDFViewerScreen() {
           const storage = getStorage();
 
           const pathReference = ref(storage, `${sanitizedLabName}/SOP.pdf`);
-          console.log(pathReference);
 
           const downloadURL = await getDownloadURL(pathReference);
 
-          console.log(downloadURL);
 
           setFileURL(downloadURL);
         } catch (e) {
@@ -48,7 +46,6 @@ export default function PDFViewerScreen() {
 
   useFocusEffect(() => {
     setLoadAgain(false);
-    console.log("Focused so load again");
     setLoadAgain(true);
   });
 

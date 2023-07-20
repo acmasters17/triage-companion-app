@@ -36,7 +36,7 @@ export default function LabRequestedScreen() {
           Please now wait until you are approved.
         </Text>
       </View>
-      <Text style={{ padding: 20, textAlign: "center" }}>
+      <Text style={{ padding: 20, textAlign: "center", marginBottom: 100 }}>
         You can refresh this page by using the above refresh icon!
       </Text>
     </View>

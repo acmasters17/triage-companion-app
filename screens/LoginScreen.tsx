@@ -42,12 +42,12 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text category="h5" style={{ paddingTop: 20 }}>
+      <Text category="h5" style={{ paddingTop: 40 }}>
         Welcome to your DTC!
       </Text>
       <Image
         source={require("../assets/DTCLogoNoBackground.png")}
-        style={{ height: 200, width: 200 }}
+        style={{ height: 200, width: 200, marginVertical: 20 }}
       />
       <View style={styles.inputContainer}>
         <Input
@@ -55,23 +55,26 @@ export default function LoginScreen() {
           value={email}
           placeholder="evasmith@triage.com"
           onChangeText={(text) => setEmail(text)}
-          style={{ margin: 5 }}
+          style={{ marginHorizontal: 5, marginVertical: 20 }}
         />
         <Input
           value={password}
           label="Password"
           placeholder="********"
-          style={{ margin: 5 }}
+          style={{ marginHorizontal: 5, marginVertical: 20 }}
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <Button style={{ width: "80%" }} onPress={handleSignUp}>
-        <Text>Sign Up</Text>
-      </Button>
-      <Button style={{ width: "80%", marginBottom: 50 }} onPress={handleSignIn}>
-        <Text>Sign In</Text>
-      </Button>
+      <View style={{display: "flex", flexDirection: "column", alignItems: "center", width: "80%", marginTop: 20}}>
+        <Button style={{ marginHorizontal: 5,marginVertical: 10, width: "100%" }} onPress={handleSignUp}>
+          <Text>Sign Up</Text>
+        </Button>
+        <Text style={{margin: 5}}>Or</Text>
+        <Button style={{marginHorizontal: 5,marginVertical: 10, width: "100%" }} onPress={handleSignIn}>
+          <Text>Sign In</Text>
+        </Button>
+      </View>
     </View>
   );
 }
@@ -79,7 +82,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   inputContainer: {

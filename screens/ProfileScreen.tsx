@@ -119,6 +119,7 @@ export default function ProfileScreen() {
                 "lab-name",
                 "lab-approved",
                 "lab-owner",
+                "kitChecklist",
               ]);
               auth.signOut();
             } catch (e) {

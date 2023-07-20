@@ -44,7 +44,6 @@ export default function MyLabScreen() {
           setApprovedUsers(newUsers.filter((user) => user.approved));
           setUnapprovedUsers(newUsers.filter((user) => !user.approved));
 
-          console.log(req.data);
         } catch (e) {
           throwToastError(e);
         }

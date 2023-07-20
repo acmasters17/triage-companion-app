@@ -30,10 +30,8 @@ export default function NavigationScreenManager() {
   // run on start up, check labcode and if approved, if both of these are true then progress to home screen
   // if offline this is fine, if online need to check user logged in as well
   useEffect(() => {
-    console.log("Test");
     // add listener to see if firebase has authenticated
     const firebaseSignedIn = onAuthStateChanged(auth, async (user: any) => {
-      console.log("AUTH CHANGE");
       // if user present
       if (user) {
         try {
