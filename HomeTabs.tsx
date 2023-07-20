@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileStack from "./ProfileStack";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import Toast from "react-native-toast-message";
 import { throwToastError, throwToastSuccess } from "./utilities/toastFunctions";
 import { sanitizeLabName } from "./utilities/sanitizer";
 
@@ -38,6 +37,7 @@ export default function HomeTabs() {
   const getAllConfigs = async () => {
     setNewConfigsLoading(true);
     await getKitCheckListConfig();
+    await getFlashCardsConfig();
     setNewConfigsLoading(false);
     setReloadTabs(!reloadTabs);
     throwToastSuccess("New content has been downloaded.");
@@ -57,6 +57,25 @@ export default function HomeTabs() {
       const newKitChecklist = data.kitChecklist as string[];
 
       AsyncStorage.setItem("kitChecklist", JSON.stringify(newKitChecklist));
+    } catch (e) {
+      throwToastError(e);
+    }
+  };
+
+  const getFlashCardsConfig = async () => {
+    // Cloud Request to get flashcards content
+    const getFlashCards = httpsCallable(functions, "getFlashCards");
+    try {
+      // cloud request to get flashcards
+      const req = await getFlashCards({
+        labName: sanitizeLabName(loadedLabName),
+      });
+
+      // get flashcards from data sent back
+      const data = req.data as any;
+      const newFlashCards = data.flashCards as string[];
+
+      AsyncStorage.setItem("flashCards", JSON.stringify(newFlashCards));
     } catch (e) {
       throwToastError(e);
     }
@@ -92,6 +111,7 @@ export default function HomeTabs() {
             <TouchableOpacity
               style={{ marginRight: 15 }}
               onPress={getAllConfigs}
+              disabled={newConfigsLoading}
             >
               <MaterialIcon name="refresh" color="white" size={26} />
             </TouchableOpacity>
@@ -107,8 +127,10 @@ export default function HomeTabs() {
       <Tab.Screen name="Kit Checklist">
         {() => <KitScreen reloadBecauseOfCloud={reloadTabs} />}
       </Tab.Screen>
-      <Tab.Screen name="Flash Cards" component={FlashCardScreen} />
-      <Tab.Screen name="PDF Viewer" component={PDFViewerScreen}/>
+      <Tab.Screen name="Flash Cards">
+        {() => <FlashCardScreen reloadBecauseOfCloud={reloadTabs} />}
+      </Tab.Screen>
+      <Tab.Screen name="PDF Viewer" component={PDFViewerScreen} />
       <Tab.Screen
         name="Technical Triage Checklist"
         component={TechnicalTriageChecklistScreen}
