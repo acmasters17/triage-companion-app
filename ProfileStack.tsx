@@ -5,6 +5,7 @@ import MyLabScreen from "./screens/MyLabScreen";
 import MyContentSOP from "./screens/MyContentSOP";
 import MyContentHome from "./screens/MyContentHome";
 import MyContentKit from "./screens/MyContentKit";
+import MyContentFlashCards from "./screens/MyContentFlashCards";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,11 @@ export default function NavigationScreenManager() {
         options={genericBackHeader}
         name="MyContentKit"
         component={MyContentKit}
+      />
+      <Stack.Screen
+        options={genericBackHeader}
+        name="MyContentFlashCards"
+        component={MyContentFlashCards}
       />
       <Stack.Screen
         options={genericBackHeader}

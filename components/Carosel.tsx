@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginHorizontal: 2,
   },
-  paginationDotActive: { backgroundColor: "lightblue" },
-  paginationDotInactive: { backgroundColor: "gray" },
+  paginationDotInactive: { backgroundColor: "lightblue" },
+  paginationDotActive: { backgroundColor: "gray" },
 });

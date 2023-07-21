@@ -105,7 +105,7 @@ export default function HomeTabs() {
           );
         },
         headerRight: (props) =>
-          route.name === "Profile" ? (
+          route.name === "Profile" || route.name === "PDF Viewer" ? (
             <></>
           ) : (
             <TouchableOpacity

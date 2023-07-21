@@ -120,6 +120,7 @@ export default function ProfileScreen() {
                 "lab-approved",
                 "lab-owner",
                 "kitChecklist",
+                "flashCards"
               ]);
               auth.signOut();
             } catch (e) {

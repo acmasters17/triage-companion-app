@@ -38,6 +38,13 @@ export default function MyLabScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuButton}
+          onPress={() => navigation.navigate("MyContentFlashCards")}
+        >
+          <Text>Manage Flash Cards</Text>
+          <MaterialCommunityIcon name="chevron-right" size={18} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
           onPress={() => navigation.navigate("MyContentSOP")}
         >
           <Text>Manage SOP</Text>
