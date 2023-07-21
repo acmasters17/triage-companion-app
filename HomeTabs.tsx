@@ -105,7 +105,7 @@ export default function HomeTabs() {
           );
         },
         headerRight: (props) =>
-          route.name === "Profile" || route.name === "PDF Viewer" ? (
+          route.name === "Profile" ? (
             <></>
           ) : (
             <TouchableOpacity
@@ -130,7 +130,9 @@ export default function HomeTabs() {
       <Tab.Screen name="Flash Cards">
         {() => <FlashCardScreen reloadBecauseOfCloud={reloadTabs} />}
       </Tab.Screen>
-      <Tab.Screen name="PDF Viewer" component={PDFViewerScreen} />
+      <Tab.Screen name="PDF Viewer">
+        {() => <PDFViewerScreen reloadBecauseOfCloud={reloadTabs} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Technical Triage Checklist"
         component={TechnicalTriageChecklistScreen}

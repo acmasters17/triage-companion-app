@@ -5,9 +5,11 @@ import * as DocumentPicker from "expo-document-picker";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
-import { throwToastError, throwToastSuccess } from "../utilities/toastFunctions";
-import { getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
-import Toast from "react-native-toast-message";
+import {
+  throwToastError,
+  throwToastSuccess,
+} from "../utilities/toastFunctions";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 export default function MyContentSOP() {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +39,6 @@ export default function MyContentSOP() {
           const sopName = data.sopName as string;
 
           setCurrentSOPName(sopName);
-          console.log(req.data);
         } catch (e) {
           throwToastError(e);
         }
@@ -144,7 +145,6 @@ export default function MyContentSOP() {
             setFileNameToUpload(doc.name);
             setFileURIToUpload(doc.uri);
           }
-          console.log(doc);
         }}
       >
         Select From Device

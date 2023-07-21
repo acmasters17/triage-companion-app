@@ -1,16 +1,18 @@
-import { Platform, SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Spinner, Text } from "@ui-kitten/components";
 import WebView from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { ZoomAnimation } from "@ui-kitten/components/ui/animation";
+import { useIsFocused } from "@react-navigation/native";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
 
-export default function PDFViewerScreen() {
-  const [loadAgain, setLoadAgain] = useState(false);
+type PDFViewerScreenProps = {
+  reloadBecauseOfCloud: boolean;
+};
+
+export default function PDFViewerScreen(props: PDFViewerScreenProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isSOPBlank, setIsSOPBlank] = useState(false);
   const [fileURL, setFileURL] = useState("");
@@ -29,7 +31,7 @@ export default function PDFViewerScreen() {
 
           const downloadURL = await getDownloadURL(pathReference);
 
-
+          setIsSOPBlank(false);
           setFileURL(downloadURL);
         } catch (e) {
           // if it errors SOP does not exist
@@ -42,12 +44,7 @@ export default function PDFViewerScreen() {
     };
 
     getPDF();
-  }, []);
-
-  useFocusEffect(() => {
-    setLoadAgain(false);
-    setLoadAgain(true);
-  });
+  }, [props.reloadBecauseOfCloud]);
 
   const isFocused = useIsFocused();
 
@@ -83,7 +80,6 @@ export default function PDFViewerScreen() {
       mixedContentMode="always"
       domStorageEnabled={true}
       incognito
-      onNavigationStateChange={() => console.log("Change")}
     />
   ) : (
     <Text>Not Focused</Text>

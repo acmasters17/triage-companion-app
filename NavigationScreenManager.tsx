@@ -40,7 +40,6 @@ export default function NavigationScreenManager() {
           if (labName !== null) {
             if (approved === "true") {
               // lab name exists and they are approved so allow navigation to home tabs
-              console.log("Approved Lab for " + labName);
               navigation.navigate("Home");
             } else {
               console.log("Lab Code exists but not approved");
@@ -48,7 +47,6 @@ export default function NavigationScreenManager() {
               navigation.navigate("LabRequested");
             }
           } else {
-            console.log("No Lab Code");
             // navigato to create a lab screen
             navigation.navigate("LabLogin");
           }
@@ -65,7 +63,6 @@ export default function NavigationScreenManager() {
 
       //for disabling splash screen on first load
       if (!hasLoadedOnce) {
-        console.log("Setting is loaded to true");
         setHasLoadedOnce(true);
         // add small delay to wait for transistion animation before hiding screen
         setTimeout(async () => await SplashScreen.hideAsync(), 500);
