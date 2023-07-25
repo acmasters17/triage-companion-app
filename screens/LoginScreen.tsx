@@ -42,8 +42,8 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text category="h5" style={{ paddingTop: 40 }}>
-        Welcome to your DTC!
+      <Text category="h5" style={{ paddingTop: 40, textAlign: 'center' }}>
+        Welcome to your Digital Triage Companion!
       </Text>
       <Image
         source={require("../assets/DTCLogoNoBackground.png")}
