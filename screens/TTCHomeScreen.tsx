@@ -29,11 +29,11 @@ export default function TTCHomeScreen(props: TTCScreenProps) {
   const getBackground = (categoryName: string) => {
     const cleanedCategoryName = categoryName.replace(/\s+/g, "").toLowerCase();
     switch (cleanedCategoryName) {
-      case "laptop":
+      case "laptops":
         return laptopBackground;
-      case "smartphone":
+      case "smartphones":
         return smartphoneBackground;
-      case "tablet":
+      case "tablets":
         return tabletBackground;
       default:
         return otherBackground;
