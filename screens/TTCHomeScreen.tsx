@@ -1,21 +1,18 @@
 import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import React from "react";
 import { Button, Layout, Spinner, Text } from "@ui-kitten/components";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Category } from "../utilities/categoriesModel";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type TTCScreenProps = {
-  isLoading: boolean,
-  categories: Category[]
+  isLoading: boolean;
+  categories: Category[];
+  setChosenCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
 };
-
-type Category = {
-  categoryName: string;
-  list: string[];
-};
-
-
 
 export default function TTCHomeScreen(props: TTCScreenProps) {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   if (props.isLoading)
     return (
@@ -47,12 +44,22 @@ export default function TTCHomeScreen(props: TTCScreenProps) {
       </Text>
       {props.categories.length === 0 ? (
         <Text style={{ textAlign: "center", margin: 20 }}>
-          No categories have been set yet! Please contact your head of lab to add
-          items.
+          No categories have been set yet! Please contact your head of lab to
+          add items.
         </Text>
       ) : (
         <ScrollView style={{ marginTop: 20, marginLeft: 4 }}>
-          {props.categories.map((item, key) => <Button key={key}>{item.categoryName}</Button>)}
+          {props.categories.map((item, key) => (
+            <Button
+              key={key}
+              onPress={() => {
+                props.setChosenCategoryIndex(key);
+                navigation.navigate("TTCCategory");
+              }}
+            >
+              {item.categoryName}
+            </Button>
+          ))}
         </ScrollView>
       )}
     </Layout>

@@ -12,6 +12,7 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { throwToastError, throwToastSuccess } from "./utilities/toastFunctions";
 import { sanitizeLabName } from "./utilities/sanitizer";
 import TTCStack from "./screens/TTCStack";
+import { Category } from "./utilities/categoriesModel";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,6 +39,7 @@ export default function HomeTabs() {
     setNewConfigsLoading(true);
     await getKitCheckListConfig();
     await getFlashCardsConfig();
+    await getTechnicalTriageChecklistConfig();
     setNewConfigsLoading(false);
     setReloadTabs(!reloadTabs);
     throwToastSuccess("New content has been downloaded.");
@@ -76,6 +78,25 @@ export default function HomeTabs() {
       const newFlashCards = data.flashCards as string[];
 
       AsyncStorage.setItem("flashCards", JSON.stringify(newFlashCards));
+    } catch (e) {
+      throwToastError(e);
+    }
+  };
+
+  const getTechnicalTriageChecklistConfig = async () => {
+    // Cloud Request to get ttc content
+    const getTTC = httpsCallable(functions, "getTechTriageChecklist");
+    try {
+      // cloud request to get ttc
+      const req = await getTTC({
+        labName: sanitizeLabName(loadedLabName),
+      });
+
+      // get ttc from data sent back
+      const data = req.data as any;
+      const newTTC = data.technicalTriageChecklist as Category[];
+
+      AsyncStorage.setItem("technicalTriageChecklist", JSON.stringify(newTTC));
     } catch (e) {
       throwToastError(e);
     }

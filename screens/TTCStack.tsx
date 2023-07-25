@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { throwToastError } from "../utilities/toastFunctions";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { Category } from "../utilities/categoriesModel";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,10 +16,6 @@ type TTCStackProps = {
   reloadBecauseOfCloud: boolean;
 };
 
-type Category = {
-  categoryName: string;
-  list: string[];
-};
 
 export default function TTCStack(props: TTCStackProps) {
   const [technicalTriageChecklistItems, setTechnicalTriageChecklistItems] =
@@ -73,6 +70,7 @@ export default function TTCStack(props: TTCStackProps) {
           <TTCHomeScreen
             isLoading={isLoading}
             categories={technicalTriageChecklistItems}
+            setChosenCategoryIndex={setChosenIndex}
           />
         )}
       </Stack.Screen>
