@@ -123,7 +123,8 @@ export default function ProfileScreen() {
                 "lab-approved",
                 "lab-owner",
                 "kitChecklist",
-                "flashCards"
+                "flashCards",
+                "technicalTriageChecklist"
               ]);
               auth.signOut();
             } catch (e) {

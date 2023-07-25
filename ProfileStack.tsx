@@ -6,6 +6,7 @@ import MyContentSOP from "./screens/MyContentSOP";
 import MyContentHome from "./screens/MyContentHome";
 import MyContentKit from "./screens/MyContentKit";
 import MyContentFlashCards from "./screens/MyContentFlashCards";
+import MyContentTTC from "./screens/MyContentTTC";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,11 @@ export default function NavigationScreenManager() {
         options={genericBackHeader}
         name="MyContentSOP"
         component={MyContentSOP}
+      />
+      <Stack.Screen
+        options={genericBackHeader}
+        name="MyContentTTC"
+        component={MyContentTTC}
       />
     </Stack.Navigator>
   );

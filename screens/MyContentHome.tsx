@@ -50,6 +50,13 @@ export default function MyLabScreen() {
           <Text>Manage SOP</Text>
           <MaterialCommunityIcon name="chevron-right" size={18} />
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("MyContentTTC")}
+        >
+          <Text>Manage Technical Triage Checklist</Text>
+          <MaterialCommunityIcon name="chevron-right" size={18} />
+        </TouchableOpacity>
       </View>
     </Layout>
   );
