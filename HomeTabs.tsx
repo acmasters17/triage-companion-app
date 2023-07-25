@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import KitScreen from "./screens/KitScreen";
 import FlashCardScreen from "./screens/FlashCardScreen";
 import PDFViewerScreen from "./screens/PDFDisplayerScreen";
-import TechnicalTriageChecklistScreen from "./screens/TechnicalTriageChecklistScreen";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import ProfileStack from "./ProfileStack";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { throwToastError, throwToastSuccess } from "./utilities/toastFunctions";
 import { sanitizeLabName } from "./utilities/sanitizer";
+import TTCStack from "./screens/TTCStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,6 +81,7 @@ export default function HomeTabs() {
     }
   };
 
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -109,7 +110,7 @@ export default function HomeTabs() {
             <></>
           ) : (
             <TouchableOpacity
-              style={{ marginRight: 15 }}
+              style={{ marginRight: 20 }}
               onPress={getAllConfigs}
               disabled={newConfigsLoading}
             >
@@ -135,8 +136,16 @@ export default function HomeTabs() {
       </Tab.Screen>
       <Tab.Screen
         name="Technical Triage Checklist"
-        component={TechnicalTriageChecklistScreen}
-      />
+        options={{ headerShown: false }}
+      >
+        {() => (
+          <TTCStack
+            getAllConfigs={getAllConfigs}
+            newConfigsLoading={newConfigsLoading}
+            reloadBecauseOfCloud={reloadTabs}
+          />
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Profile"
         component={ProfileStack}

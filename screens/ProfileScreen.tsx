@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function ProfileScreen() {
   const [isLabOwner, setIsLabOwner] = useState(false);
+  const [labName, setLabName] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   useEffect(() => {
@@ -19,9 +20,11 @@ export default function ProfileScreen() {
       // get values from local storage about if this user created it or not and if it matches currently assigned one
       try {
         const labOwner = await AsyncStorage.getItem("lab-owner");
-        if (labOwner !== null) {
+        const newLabName = await AsyncStorage.getItem("lab-name")
+        if (labOwner !== null && newLabName) {
           // labowner so set to true
           setIsLabOwner(true);
+          setLabName(newLabName);
         }
       } catch (e) {
         throwToastError(e);
@@ -72,7 +75,7 @@ export default function ProfileScreen() {
           }}
         >
           <Text category="s1">{`${auth.currentUser.email}`}</Text>
-          <Text category="s2">{isLabOwner ? "Lab Owner" : "Lab Member"}</Text>
+          <Text category="s2">{isLabOwner ? "Lab Owner - " + labName : "Lab Member - " + labName}</Text>
         </View>
       </View>
 
