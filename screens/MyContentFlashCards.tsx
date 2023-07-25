@@ -177,7 +177,7 @@ export default function MyContentFlashCards() {
                   style={{ backgroundColor: "#EEEEEE", marginVertical: 2 }}
                   title={item}
                   accessoryRight={() => renderEditDeleteButtons(item, key)}
-                  disabled={requestBeingMade}
+                  disabled
                 />
               ))
             )}

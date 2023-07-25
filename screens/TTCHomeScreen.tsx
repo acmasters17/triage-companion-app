@@ -89,7 +89,6 @@ export default function TTCHomeScreen(props: TTCScreenProps) {
                 style={{ width: "100%", height: 150, borderRadius: 20 }}
                 resizeMode="cover"
                 imageStyle={{ borderRadius: 20 }}
-                blurRadius={3}
               >
                 <View
                   style={{

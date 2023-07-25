@@ -85,7 +85,7 @@ export default function HomeTabs() {
 
   const getTechnicalTriageChecklistConfig = async () => {
     // Cloud Request to get ttc content
-    const getTTC = httpsCallable(functions, "getTechTriageChecklist");
+    const getTTC = httpsCallable(functions, "getTTChecklist");
     try {
       // cloud request to get ttc
       const req = await getTTC({

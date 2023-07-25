@@ -179,7 +179,7 @@ export default function MyContentKit() {
                   style={{ backgroundColor: "#EEEEEE", marginVertical: 2 }}
                   title={item}
                   accessoryRight={() => renderEditDeleteButtons(item, key)}
-                  disabled={requestBeingMade}
+                  disabled
                 />
               ))
             )}

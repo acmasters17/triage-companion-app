@@ -16,38 +16,42 @@ import {
   throwToastSuccess,
 } from "../utilities/toastFunctions";
 import { Dialog } from "@rneui/base";
+import { Category } from "../utilities/categoriesModel";
 
 export default function MyContentTTC() {
-  const [kitChecklistItems, setKitChecklistItems] = useState<string[]>([]);
+  const [TTCItems, setTTCItems] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [requestBeingMade, setRequestBeingMade] = useState(false);
   const [addEditDialogVisible, setAddEditDialogVisible] = useState(false);
   const [labName, setLabName] = useState("");
   const [editingValue, setEditingValue] = useState("");
   const [editingIndex, setEditingIndex] = useState(-1);
-  const [editingMode, setEditingMode] = useState<"Add" | "Edit">("Add");
+  const [addionalEditingIndex, setAddionalEditingIndex] = useState(-1);
+  const [editingMode, setEditingMode] = useState<
+    "Add Category" | "Add Item" | "Edit Category" | "Edit Item"
+  >("Add Category");
   const functions = getFunctions();
 
-  //   // get current config on start up
+  // get current config on start up
   useEffect(() => {
     const getChecklistConfig = async () => {
       setIsLoading(true);
       // Cloud Request to join lab so call an async request
-      const getKitChecklist = httpsCallable(functions, "getKitChecklist");
+      const getTTCChecklist = httpsCallable(functions, "getTTChecklist");
       const loadedLabName = await AsyncStorage.getItem("lab-name");
       if (loadedLabName) {
         setLabName(loadedLabName);
         try {
           // cloud request to get checklist
-          const req = await getKitChecklist({
+          const req = await getTTCChecklist({
             labName: sanitizeLabName(loadedLabName),
           });
 
           // get checklist
           const data = req.data as any;
-          const newKitChecklist = data.kitChecklist as string[];
+          const newTTCChecklist = data.technicalTriageChecklist as Category[];
 
-          setKitChecklistItems(newKitChecklist);
+          setTTCItems(newTTCChecklist);
         } catch (e) {
           throwToastError(e);
         }
@@ -58,22 +62,59 @@ export default function MyContentTTC() {
     getChecklistConfig();
   }, []);
 
-  const openDialog = (mode: "Add" | "Edit", index: number, value: string) => {
+  const openDialog = (
+    mode: "Add Category" | "Add Item" | "Edit Category" | "Edit Item",
+    firstIndex: number,
+    secondIndex: number,
+    value: string
+  ) => {
     setEditingMode(mode);
-    setEditingIndex(index);
+    setEditingIndex(firstIndex);
+    setAddionalEditingIndex(secondIndex);
     setEditingValue(value);
     setAddEditDialogVisible(true);
   };
 
   const saveDialogChanges = () => {
-    if (editingMode === "Add") {
-      // add new value to array
-      setKitChecklistItems((oldItems) => oldItems.concat([editingValue]));
-    } else {
-      // modify value at index
-      setKitChecklistItems((oldItems) =>
+    if (editingMode === "Add Category") {
+      // add new category to array
+      setTTCItems((oldItems) =>
+        oldItems.concat([{ categoryName: editingValue, list: [] }])
+      );
+    } else if (editingMode === "Add Item") {
+      setTTCItems((oldItems) =>
         oldItems.map((oldItem, oldIndex) =>
-          oldIndex === editingIndex ? editingValue : oldItem
+          oldIndex === editingIndex
+            ? {
+                categoryName: oldItem.categoryName,
+                list: oldItem.list.concat([editingValue]),
+              }
+            : oldItem
+        )
+      );
+    } else if (editingMode === "Edit Category") {
+      // modify value at index
+      setTTCItems((oldItems) =>
+        oldItems.map((oldItem, oldIndex) =>
+          oldIndex === editingIndex
+            ? { categoryName: editingValue, list: oldItem.list }
+            : oldItem
+        )
+      );
+    } else {
+      // modify value at index and addional index
+      setTTCItems((oldItems) =>
+        oldItems.map((oldItem, oldIndex) =>
+          oldIndex === editingIndex
+            ? {
+                categoryName: oldItem.categoryName,
+                list: oldItem.list.map((innerOldListItem, innerOldListIndex) =>
+                  innerOldListIndex === addionalEditingIndex
+                    ? editingValue
+                    : innerOldListItem
+                ),
+              }
+            : oldItem
         )
       );
     }
@@ -85,32 +126,40 @@ export default function MyContentTTC() {
   const closeDialog = () => {
     setEditingValue("");
     setEditingIndex(-1);
+    setAddionalEditingIndex(-1);
     setAddEditDialogVisible(false);
   };
 
   const saveChangesInCloudButton = async () => {
     setRequestBeingMade(true);
-    const updateKitChecklist = httpsCallable(functions, "updateKitChecklist");
+    const updateTTChecklist = httpsCallable(functions, "updateTTChecklist");
     try {
-      // cloud request to get checklist
-      await updateKitChecklist({
+      // cloud request to update TTC checklist
+      await updateTTChecklist({
         labName: sanitizeLabName(labName),
-        newKitChecklist: kitChecklistItems,
+        newTechnicalTriageChecklist: TTCItems,
       });
-      throwToastSuccess(`Your new Kit Checklist has been uploaded.`);
+
+      throwToastSuccess(
+        `Your new Technical Triage Checklist has been uploaded.`
+      );
     } catch (e) {
       throwToastError(e);
     }
     setRequestBeingMade(false);
   };
 
-  const renderEditDeleteButtons = (item: string, index: number) => (
+  const renderItemEditDeleteButtons = (
+    item: string,
+    innerIndex: number,
+    outerIndex: number
+  ) => (
     <>
       <Button
         size="tiny"
         status="info"
         style={{ marginRight: 5 }}
-        onPress={() => openDialog("Edit", index, item)}
+        onPress={() => openDialog("Edit Item", outerIndex, innerIndex, item)}
         disabled={requestBeingMade}
       >
         Edit
@@ -120,8 +169,47 @@ export default function MyContentTTC() {
         status="danger"
         disabled={requestBeingMade}
         onPress={() =>
-          setKitChecklistItems((oldItems) =>
-            oldItems.filter((oldi) => oldi !== item)
+          setTTCItems((oldItems) =>
+            oldItems.map((oldItem, oldIndex) =>
+              oldIndex === outerIndex
+                ? {
+                    categoryName: oldItem.categoryName,
+                    list: oldItem.list.filter((oldi) => oldi !== item),
+                  }
+                : oldItem
+            )
+          )
+        }
+      >
+        Delete
+      </Button>
+    </>
+  );
+
+  const renderCategoryEditDeleteButtons = (
+    categoryName: string,
+    innerIndex: number,
+    outerIndex: number
+  ) => (
+    <>
+      <Button
+        size="tiny"
+        status="info"
+        style={{ marginRight: 5 }}
+        onPress={() =>
+          openDialog("Edit Category", outerIndex, innerIndex, categoryName)
+        }
+        disabled={requestBeingMade}
+      >
+        Edit
+      </Button>
+      <Button
+        size="tiny"
+        status="danger"
+        disabled={requestBeingMade}
+        onPress={() =>
+          setTTCItems((oldItems) =>
+            oldItems.filter((a) => a.categoryName !== categoryName)
           )
         }
       >
@@ -142,7 +230,7 @@ export default function MyContentTTC() {
           alignItems: "center",
         }}
       >
-        <Text category="h6">Current Kit Checklist</Text>
+        <Text category="h6">Current TTC</Text>
         <Button onPress={saveChangesInCloudButton} disabled={requestBeingMade}>
           Save
         </Button>
@@ -168,19 +256,56 @@ export default function MyContentTTC() {
           </View>
         ) : (
           <>
-            {kitChecklistItems.length === 0 ? (
+            {TTCItems.length === 0 ? (
               <Text style={{ textAlign: "center", margin: 20 }}>
                 No items have been set yet!
               </Text>
             ) : (
-              kitChecklistItems.map((item, key) => (
-                <ListItem
-                  key={key}
-                  style={{ backgroundColor: "#EEEEEE", marginVertical: 2 }}
-                  title={item}
-                  accessoryRight={() => renderEditDeleteButtons(item, key)}
-                  disabled={requestBeingMade}
-                />
+              TTCItems.map((outerItem, outerKey) => (
+                <View key={outerKey}>
+                  <ListItem
+                    title={(_) => (
+                      <Text category="s1">{outerItem.categoryName}</Text>
+                    )}
+                    accessoryRight={() =>
+                      renderCategoryEditDeleteButtons(
+                        outerItem.categoryName,
+                        -1,
+                        outerKey
+                      )
+                    }
+                    disabled
+                  />
+                  {outerItem.list.map((innerItem, innerKey) => (
+                    <ListItem
+                      key={innerKey}
+                      style={{ backgroundColor: "#EEEEEE", marginVertical: 2 }}
+                      title={innerItem}
+                      accessoryRight={() =>
+                        renderItemEditDeleteButtons(
+                          innerItem,
+                          innerKey,
+                          outerKey
+                        )
+                      }
+                      disabled
+                    />
+                  ))}
+                  <ListItem
+                    disabled
+                    accessoryRight={() => (
+                      <Button
+                        size="small"
+                        status="success"
+                        style={{ marginVertical: 5 }}
+                        onPress={() => openDialog("Add Item", outerKey, -1, "")}
+                        disabled={requestBeingMade}
+                      >
+                        Add Item
+                      </Button>
+                    )}
+                  />
+                </View>
               ))
             )}
             <ListItem
@@ -190,10 +315,10 @@ export default function MyContentTTC() {
                   size="small"
                   status="success"
                   style={{ marginVertical: 5 }}
-                  onPress={() => openDialog("Add", -1, "")}
+                  onPress={() => openDialog("Add Category", -1, -1, "")}
                   disabled={requestBeingMade}
                 >
-                  Add
+                  Add Category
                 </Button>
               )}
             />
@@ -205,14 +330,11 @@ export default function MyContentTTC() {
         onBackdropPress={closeDialog}
         overlayStyle={{ borderRadius: 10, backgroundColor: "white" }}
       >
-        <Dialog.Title
-          titleStyle={{ margin: 10 }}
-          title={editingMode === "Add" ? "Add" : "Edit"}
-        />
+        <Dialog.Title titleStyle={{ margin: 10 }} title={editingMode} />
         <Input
           label="Item"
           value={editingValue}
-          placeholder="e.g Triage Laptop"
+          placeholder={editingMode === "Add Category" || editingMode === "Edit Category" ? "e.g Smartphones" : "e.g. Perform Key Word Search"}
           onChangeText={(text) => setEditingValue(text)}
           style={{ marginHorizontal: 10, marginVertical: 20 }}
         />
@@ -223,7 +345,9 @@ export default function MyContentTTC() {
             status="success"
             style={{ marginHorizontal: 10 }}
           >
-            {editingMode === "Add" ? "Add" : "Save"}
+            {editingMode === "Add Category" || editingMode === "Add Item"
+              ? editingMode
+              : "Save"}
           </Button>
           <Button size="small" onPress={closeDialog} status="danger">
             Cancel
