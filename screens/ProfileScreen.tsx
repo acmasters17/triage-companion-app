@@ -20,11 +20,13 @@ export default function ProfileScreen() {
       // get values from local storage about if this user created it or not and if it matches currently assigned one
       try {
         const labOwner = await AsyncStorage.getItem("lab-owner");
-        const newLabName = await AsyncStorage.getItem("lab-name")
-        if (labOwner !== null && newLabName) {
-          // labowner so set to true
-          setIsLabOwner(true);
+        const newLabName = await AsyncStorage.getItem("lab-name");
+        if (newLabName) {
           setLabName(newLabName);
+          if (labOwner) {
+            // labowner so set to true
+            setIsLabOwner(true);
+          }
         }
       } catch (e) {
         throwToastError(e);
@@ -75,7 +77,9 @@ export default function ProfileScreen() {
           }}
         >
           <Text category="s1">{`${auth.currentUser.email}`}</Text>
-          <Text category="s2">{isLabOwner ? "Lab Owner - " + labName : "Lab Member - " + labName}</Text>
+          <Text category="s2">
+            {isLabOwner ? "Lab Owner - " + labName : "Lab Member - " + labName}
+          </Text>
         </View>
       </View>
 
@@ -124,7 +128,7 @@ export default function ProfileScreen() {
                 "lab-owner",
                 "kitChecklist",
                 "flashCards",
-                "technicalTriageChecklist"
+                "technicalTriageChecklist",
               ]);
               auth.signOut();
             } catch (e) {
