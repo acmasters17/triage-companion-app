@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "triage-companion-app",
+    "name": "DTC",
     "slug": "triage-companion-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/DTCicon.png",
     "userInterfaceStyle": "light",
@@ -11,12 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.acmasters.triagecompanionapp"
+      "bundleIdentifier": "com.acmasters.triagecompanionapp",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
