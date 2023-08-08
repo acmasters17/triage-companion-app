@@ -46,18 +46,19 @@ export default function HomeTabs() {
   };
 
   const getKitCheckListConfig = async () => {
-    // Cloud Request get checklist content
+    // Query local firebase config to get a reference to the right cloud function
     const getKitChecklist = httpsCallable(functions, "getKitChecklist");
     try {
-      // cloud request to get checklist
+      // perform cloud request to get checklist
       const req = await getKitChecklist({
         labName: sanitizeLabName(loadedLabName),
       });
 
-      // get checklist
+      // extract checklist from result
       const data = req.data as any;
       const newKitChecklist = data.kitChecklist as string[];
 
+      // store locally for offline use
       AsyncStorage.setItem("kitChecklist", JSON.stringify(newKitChecklist));
     } catch (e) {
       throwToastError(e);
@@ -102,7 +103,6 @@ export default function HomeTabs() {
     }
   };
 
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -122,9 +122,7 @@ export default function HomeTabs() {
           }
 
           // You can return any component that you like here!
-          return (
-            <MaterialCommunityIcon name={iconName} size={size} color={color} />
-          );
+          return <MaterialCommunityIcon name={iconName} size={size} color={color} />;
         },
         headerRight: (props) =>
           route.name === "Profile" ? (
@@ -155,10 +153,7 @@ export default function HomeTabs() {
       <Tab.Screen name="PDF Viewer">
         {() => <PDFViewerScreen reloadBecauseOfCloud={reloadTabs} />}
       </Tab.Screen>
-      <Tab.Screen
-        name="Technical Triage Checklist"
-        options={{ headerShown: false }}
-      >
+      <Tab.Screen name="Technical Triage Checklist" options={{ headerShown: false }}>
         {() => (
           <TTCStack
             getAllConfigs={getAllConfigs}
@@ -167,11 +162,7 @@ export default function HomeTabs() {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen
-        name="Profile"
-        component={ProfileStack}
-        options={{ headerShown: false }}
-      />
+      <Tab.Screen name="Profile" component={ProfileStack} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
