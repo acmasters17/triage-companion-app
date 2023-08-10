@@ -2,23 +2,68 @@ import { StyleSheet, View, KeyboardAvoidingView, Image, TouchableOpacity } from 
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utilities/firebaseConfig";
-import { Button, Text, Input } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { throwToastError } from "../utilities/toastFunctions";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Input } from "@rneui/base";
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const handleSignUp = async () => {
     try {
-      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredentials.user;
-      console.log("Registered with:", user.email);
+      await createUserWithEmailAndPassword(auth, email, newPassword);
     } catch (e) {
       throwToastError(e);
+    }
+  };
+
+  const validateEmail = () => {
+    if (email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+      // good email
+      setEmailError("");
+    } else {
+      setEmailError("Please enter a valid email!");
+    }
+  };
+
+  const validateNewPassword = () => {
+    if (newPassword.length >= 8) {
+      // good password
+      setNewPasswordError("");
+    } else {
+      setNewPasswordError("Please ensure your password is greater than 8 characters in length!");
+    }
+  };
+
+  const validateConfirmPassword = () => {
+    if (newPassword === confirmPassword) {
+      // matching passwords
+      setConfirmPasswordError("");
+    } else {
+      setConfirmPasswordError("Please ensure your passwords match!");
+    }
+  };
+
+  const signUpDisabled = () => {
+    if (
+      newPassword.length >= 8 &&
+      newPassword === confirmPassword &&
+      email.length > 1 &&
+      emailError === ""
+    ) {
+      // all good
+      return false;
+    } else {
+      // issue
+      return true;
     }
   };
 
@@ -31,32 +76,44 @@ export default function SignUpScreen() {
         source={require("../assets/DTCLogoNoBackground.png")}
         style={{ height: 100, width: 100 }}
       />
-      <View style={{ display: "flex" }}>
+      <View style={{ display: "flex", width: "80%" }}>
         <Input
           label="Email"
           value={email}
           placeholder="evasmith@triage.com"
-          onChangeText={(text) => setEmail(text)}
-          style={[styles.width80, { paddingVertical: 10 }]}
+          onChangeText={setEmail}
+          clearTextOnFocus={false}
+          style={{ paddingVertical: 10 }}
+          errorMessage={emailError}
+          onEndEditing={() => validateEmail()}
+          errorStyle={{ paddingBottom: 10 }}
         />
         <Input
-          value={password}
-          label="Password"
+          value={newPassword}
+          label="New Password"
           placeholder="********"
           secureTextEntry
-          onChangeText={(text) => setPassword(text)}
-          style={[styles.width80, { paddingVertical: 10 }]}
+          clearTextOnFocus={true}
+          onChangeText={setNewPassword}
+          style={{ paddingVertical: 10 }}
+          errorMessage={newPasswordError}
+          onEndEditing={() => validateNewPassword()}
+          errorStyle={{ paddingBottom: 10 }}
         />
         <Input
-          value={password}
+          value={confirmPassword}
           label="Confirm Password"
           placeholder="********"
           secureTextEntry
-          onChangeText={(text) => setPassword(text)}
-          style={[styles.width80, { paddingVertical: 10 }]}
+          clearTextOnFocus={true}
+          onChangeText={setConfirmPassword}
+          style={{ paddingVertical: 10 }}
+          errorMessage={confirmPasswordError}
+          onEndEditing={() => validateConfirmPassword()}
+          errorStyle={{ paddingBottom: 10 }}
         />
       </View>
-      <Button style={styles.width80} onPress={handleSignUp}>
+      <Button style={styles.width80} onPress={handleSignUp} disabled={signUpDisabled()}>
         <Text>Sign Up</Text>
       </Button>
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>

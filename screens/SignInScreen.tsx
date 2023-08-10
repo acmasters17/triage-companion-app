@@ -17,9 +17,7 @@ export default function SignInScreen() {
 
   const handleSignIn = async () => {
     try {
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredentials.user;
-      console.log("Logged in with:", user.email);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
       throwToastError(e);
     }
@@ -43,7 +41,7 @@ export default function SignInScreen() {
     }
   };
 
-  const signUpDisabled = () => {
+  const signInDisabled = () => {
     if (password.length >= 8 && email.length > 1 && emailError === "") {
       // all good
       return false;
@@ -87,7 +85,7 @@ export default function SignInScreen() {
           errorStyle={{ paddingBottom: 10 }}
         />
       </View>
-      <Button style={styles.width80} onPress={handleSignIn} disabled={signUpDisabled()}>
+      <Button style={styles.width80} onPress={handleSignIn} disabled={signInDisabled()}>
         <Text>Sign In</Text>
       </Button>
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
