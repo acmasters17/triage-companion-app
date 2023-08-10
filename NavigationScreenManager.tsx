@@ -10,7 +10,7 @@ import { auth } from "./utilities/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { throwToastError } from "./utilities/toastFunctions";
 import * as SplashScreen from "expo-splash-screen";
-import LoginScreen from "./screens/LoginScreen";
+import LoginScreen from "./screens/SignInScreen";
 import LabLoginScreen from "./screens/LabLoginScreen";
 import { StyleSheet } from "react-native";
 import LabRequestedScreen from "./screens/LabRequestedScreen";
@@ -19,6 +19,8 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import LabCreatedScreen from "./screens/LabCreatedScreen";
 import { sanitizeLabName } from "./utilities/sanitizer";
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +60,7 @@ export default function NavigationScreenManager() {
         }
       } else {
         // user not signed in so allow it to go to login flow
-        navigation.navigate("Login");
+        navigation.navigate("SignIn");
       }
 
       //for disabling splash screen on first load
@@ -76,8 +78,13 @@ export default function NavigationScreenManager() {
     <Stack.Navigator>
       <Stack.Screen
         options={{ title: "", headerStyle: styles.blankHeader }}
-        name="Login"
-        component={LoginScreen}
+        name="SignIn"
+        component={SignInScreen}
+      />
+      <Stack.Screen
+        options={{ title: "", headerBackVisible: false, headerStyle: styles.blankHeader }}
+        name="SignUp"
+        component={SignUpScreen}
       />
       <Stack.Screen
         name="LabLogin"
@@ -148,11 +155,7 @@ export default function NavigationScreenManager() {
         }}
         component={LabRequestedScreen}
       />
-      <Stack.Screen
-        name="Home"
-        options={{ headerShown: false }}
-        component={HomeTabs}
-      />
+      <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeTabs} />
     </Stack.Navigator>
   );
 }
