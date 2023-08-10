@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { sanitizeLabName } from "../utilities/sanitizer";
 import { throwToastError } from "../utilities/toastFunctions";
-import { auth } from "../utilities/firebaseConfig";
 
 export default function LabLoginScreen() {
   const [requestedlabName, setRequestedLabName] = useState("");
@@ -15,38 +14,34 @@ export default function LabLoginScreen() {
   const [requestBeingMade, setRequestBeingMade] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View
         style={{
           width: "100%",
           display: "flex",
           alignItems: "center",
-          paddingVertical: 20,
         }}
       >
         <Text category="h5">Join Lab</Text>
-        <Text style={{ padding: 20 }}>
-          If you are not the lab head please refer to them in order to get the
-          lab name to join your organisation
+        <Text style={{ padding: 10 }}>
+          If you are not the lab head please refer to them in order to get the lab name to join your
+          organisation
         </Text>
         <Input
           label="Lab Name"
           value={requestedlabName}
           placeholder="USW-Cyber-Lab"
           onChangeText={(text) => setRequestedLabName(text)}
-          style={{ margin: 20 }}
+          style={{ marginVertical: 10, marginHorizontal: 20 }}
         />
         <Button
-          style={{ width: "70%", marginTop: 15 }}
+          style={{ width: "70%" }}
           disabled={requestBeingMade}
           onPress={async () => {
             setRequestBeingMade(true);
             // Cloud Request to join lab so call an async request
             const functions = getFunctions();
-            const requestToJoinLabInCloud = httpsCallable(
-              functions,
-              "reqToJoinLab"
-            );
+            const requestToJoinLabInCloud = httpsCallable(functions, "reqToJoinLab");
 
             try {
               // cloud request to join lab name
@@ -71,13 +66,11 @@ export default function LabLoginScreen() {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          paddingVertical: 20,
         }}
       >
         <Text category="h5">Create Lab</Text>
-        <Text style={{ padding: 20 }}>
-          If you are the lab head please fill out the form below to create a
-          lab!
+        <Text style={{ padding: 10 }}>
+          If you are the lab head please fill out the form below to create a lab!
         </Text>
         <Input
           label="Lab Name"
@@ -87,7 +80,7 @@ export default function LabLoginScreen() {
           style={{ margin: 20 }}
         />
         <Button
-          style={{ width: "70%", marginTop: 15, marginBottom: 100 }}
+          style={{ width: "70%", marginVertical: 10, marginHorizontal: 20 }}
           disabled={requestBeingMade}
           onPress={async () => {
             setRequestBeingMade(true);
@@ -116,14 +109,14 @@ export default function LabLoginScreen() {
           Create Lab
         </Button>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
 });
