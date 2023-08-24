@@ -108,7 +108,7 @@ export default function ProfileScreen() {
         ) : (
           <></>
         )}
-        <Button
+        {/* <Button
           style={{
             width: "100%",
             marginTop: 20,
@@ -134,7 +134,7 @@ export default function ProfileScreen() {
           }}
         >
           Complete Cache Clear Sign Out
-        </Button>
+        </Button> */}
         <Button
           style={{ marginVertical: 8, width: "100%", paddingVertical: 15 }}
           status="danger"
